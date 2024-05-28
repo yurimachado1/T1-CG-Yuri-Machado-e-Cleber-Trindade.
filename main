@@ -1,0 +1,121 @@
+import pygame
+import sys
+
+# Inicializa o Pygame
+pygame.init()
+
+# Define as dimensões da tela
+SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Pong For Two - Melhorado")
+
+# Define as cores
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+BLUE = (0, 0, 255)  # Nova cor de fundo
+
+# Define as dimensões dos objetos
+PLAYER_WIDTH, PLAYER_HEIGHT = 15, 150
+BALL_SIZE = 15
+
+# Define as velocidades
+PLAYER_SPEED = 20  # Velocidade reduzida
+BALL_SPEED_X, BALL_SPEED_Y = 5, 5
+
+# Inicializa as posições dos jogadores e da bola
+LEFT_PLAYER_POSITION = [0, SCREEN_HEIGHT // 2 - PLAYER_HEIGHT // 2]
+RIGHT_PLAYER_POSITION = [SCREEN_WIDTH - PLAYER_WIDTH, SCREEN_HEIGHT // 2 - PLAYER_HEIGHT // 2]
+BALL_POSITION = [SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2]
+BALL_DIRECTION = [1, 1]
+
+# Inicializa os placares
+score_left, score_right = 0, 0
+
+# Fonte para o placar
+try:
+    font = pygame.font.SysFont("Comic Sans MS", 50)
+except:
+    font = pygame.font.SysFont("monospace", 50)
+
+# Função para desenhar o campo
+def draw_field():
+    screen.fill(BLUE)  # Fundo azul
+    pygame.draw.rect(screen, WHITE, (LEFT_PLAYER_POSITION[0], LEFT_PLAYER_POSITION[1], PLAYER_WIDTH, PLAYER_HEIGHT))
+    pygame.draw.rect(screen, WHITE, (RIGHT_PLAYER_POSITION[0], RIGHT_PLAYER_POSITION[1], PLAYER_WIDTH, PLAYER_HEIGHT))
+    pygame.draw.ellipse(screen, WHITE, (BALL_POSITION[0] - BALL_SIZE / 2, BALL_POSITION[1] - BALL_SIZE / 2, BALL_SIZE, BALL_SIZE))
+    pygame.draw.aaline(screen, WHITE, (SCREEN_WIDTH // 2, 0), (SCREEN_WIDTH // 2, SCREEN_HEIGHT))
+
+# Função para atualizar a posição da bola
+def update_ball():
+    global BALL_POSITION, BALL_DIRECTION, BALL_SPEED_X, BALL_SPEED_Y, score_left, score_right
+    BALL_POSITION[0] += BALL_DIRECTION[0] * BALL_SPEED_X
+    BALL_POSITION[1] += BALL_DIRECTION[1] * BALL_SPEED_Y
+
+    # Colisão com a parede superior e inferior
+    if BALL_POSITION[1] <= 0 or BALL_POSITION[1] >= SCREEN_HEIGHT:
+        BALL_DIRECTION[1] *= -1
+
+    # Colisão com os jogadores
+    if (BALL_POSITION[0] - BALL_SIZE / 2 <= LEFT_PLAYER_POSITION[0] + PLAYER_WIDTH and
+            LEFT_PLAYER_POSITION[1] <= BALL_POSITION[1] <= LEFT_PLAYER_POSITION[1] + PLAYER_HEIGHT) or (
+            BALL_POSITION[0] + BALL_SIZE / 2 >= RIGHT_PLAYER_POSITION[0] and
+            RIGHT_PLAYER_POSITION[1] <= BALL_POSITION[1] <= RIGHT_PLAYER_POSITION[1] + PLAYER_HEIGHT):
+        BALL_DIRECTION[0] *= -1
+        BALL_SPEED_X += 0.2
+        BALL_SPEED_Y += 0.2
+
+    # Detecta pontuação
+    if BALL_POSITION[0] < 0:
+        score_right += 1
+        reset_ball()
+    elif BALL_POSITION[0] > SCREEN_WIDTH:
+        score_left += 1
+        reset_ball()
+
+# Função para resetar a bola
+def reset_ball():
+    global BALL_POSITION, BALL_SPEED_X, BALL_SPEED_Y
+    BALL_POSITION = [SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2]
+    BALL_SPEED_X, BALL_SPEED_Y = 5, 5
+
+# Função para exibir o placar
+def draw_score():
+    left_score_text = font.render(str(score_left), 1, WHITE)
+    right_score_text = font.render(str(score_right), 1, WHITE)
+    screen.blit(left_score_text, (SCREEN_WIDTH // 4, 20))
+    screen.blit(right_score_text, (SCREEN_WIDTH * 3 // 4, 20))
+
+# Função principal do jogo
+def main():
+    clock = pygame.time.Clock()
+    paused = False
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:
+                    paused = not paused
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_w] and LEFT_PLAYER_POSITION[1] > 0:
+            LEFT_PLAYER_POSITION[1] -= PLAYER_SPEED
+        if keys[pygame.K_s] and LEFT_PLAYER_POSITION[1] < SCREEN_HEIGHT - PLAYER_HEIGHT:
+            LEFT_PLAYER_POSITION[1] += PLAYER_SPEED
+        if keys[pygame.K_o] and RIGHT_PLAYER_POSITION[1] > 0:
+            RIGHT_PLAYER_POSITION[1] -= PLAYER_SPEED
+        if keys[pygame.K_l] and RIGHT_PLAYER_POSITION[1] < SCREEN_HEIGHT - PLAYER_HEIGHT:
+            RIGHT_PLAYER_POSITION[1] += PLAYER_SPEED
+
+        if not paused:
+            update_ball()
+
+        draw_field()
+        draw_score()
+        pygame.display.flip()
+        clock.tick(60)
+
+if __name__ == "__main__":
+    main()

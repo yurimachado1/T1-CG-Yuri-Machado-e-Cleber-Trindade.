@@ -17,20 +17,15 @@ Os jogadores da esquerda e da direita são controlados pelas teclas W/S e O/L, r
 O jogo pode ser pausado e retomado pressionando a tecla P.
 
 ## Funções do Código
-* draw_field()
-Esta função desenha o campo de jogo, incluindo os jogadores, a bola e a linha central.
+* draw_field() - Esta função desenha o campo de jogo, incluindo os jogadores, a bola e a linha central.
 
-* update_ball()
-Esta função atualiza a posição da bola, verifica colisões com os jogadores e as paredes, e detecta pontuações.
+* update_ball() - Esta função atualiza a posição da bola, verifica colisões com os jogadores e as paredes, e detecta pontuações.
 
-* reset_ball()
-Esta função reseta a posição da bola e a velocidade após um ponto ser marcado.
+* reset_ball() - Esta função reseta a posição da bola e a velocidade após um ponto ser marcado.
 
-* draw_score()
-Esta função desenha o placar na tela.
+* draw_score() - Esta função desenha o placar na tela.
 
-* main()
-Esta função contém o loop principal do jogo, processa eventos, atualiza estados e redesenha a tela a cada frame.
+* main() - Esta função contém o loop principal do jogo, processa eventos, atualiza estados e redesenha a tela a cada frame.
 
 ## Controles
 Jogador da Esquerda: W (para cima), S (para baixo)

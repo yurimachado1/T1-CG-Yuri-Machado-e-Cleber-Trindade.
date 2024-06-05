@@ -1,3 +1,14 @@
+"""
+Pong For Two
+Autores: Yuri Machado e Cleber Trindade
+Data: 06/06/2024
+Descrição: Implementação de um jogo de Pong para dois jogadores.
+Controles: 
+- Jogador da esquerda: W (para cima), S (para baixo)
+- Jogador da direita: O (para cima), L (para baixo)
+- P: Pausar/Despausar o jogo
+"""
+
 import pygame
 import sys
 
@@ -7,7 +18,7 @@ pygame.init()
 # Define as dimensões da tela
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Pong For Two - Melhorado")
+pygame.display.set_caption("Pong For Two")
 
 # Define as cores
 WHITE = (255, 255, 255)
@@ -39,32 +50,37 @@ except:
 
 # Função para desenhar o campo
 def draw_field():
-    screen.fill(BLUE)  # Fundo azul
+    # Limpa a tela com a cor de fundo azul
+    screen.fill(BLUE)  
+    # Desenha os jogadores
     pygame.draw.rect(screen, WHITE, (LEFT_PLAYER_POSITION[0], LEFT_PLAYER_POSITION[1], PLAYER_WIDTH, PLAYER_HEIGHT))
     pygame.draw.rect(screen, WHITE, (RIGHT_PLAYER_POSITION[0], RIGHT_PLAYER_POSITION[1], PLAYER_WIDTH, PLAYER_HEIGHT))
+    # Desenha a bola
     pygame.draw.ellipse(screen, WHITE, (BALL_POSITION[0] - BALL_SIZE / 2, BALL_POSITION[1] - BALL_SIZE / 2, BALL_SIZE, BALL_SIZE))
+    # Desenha a linha central
     pygame.draw.aaline(screen, WHITE, (SCREEN_WIDTH // 2, 0), (SCREEN_WIDTH // 2, SCREEN_HEIGHT))
 
 # Função para atualizar a posição da bola
 def update_ball():
     global BALL_POSITION, BALL_DIRECTION, BALL_SPEED_X, BALL_SPEED_Y, score_left, score_right
+    # Atualiza a posição da bola
     BALL_POSITION[0] += BALL_DIRECTION[0] * BALL_SPEED_X
     BALL_POSITION[1] += BALL_DIRECTION[1] * BALL_SPEED_Y
 
-    # Colisão com a parede superior e inferior
+    # Verifica colisão com as paredes superior e inferior
     if BALL_POSITION[1] <= 0 or BALL_POSITION[1] >= SCREEN_HEIGHT:
         BALL_DIRECTION[1] *= -1
 
-    # Colisão com os jogadores
+    # Verifica colisão com os jogadores
     if (BALL_POSITION[0] - BALL_SIZE / 2 <= LEFT_PLAYER_POSITION[0] + PLAYER_WIDTH and
             LEFT_PLAYER_POSITION[1] <= BALL_POSITION[1] <= LEFT_PLAYER_POSITION[1] + PLAYER_HEIGHT) or (
             BALL_POSITION[0] + BALL_SIZE / 2 >= RIGHT_PLAYER_POSITION[0] and
             RIGHT_PLAYER_POSITION[1] <= BALL_POSITION[1] <= RIGHT_PLAYER_POSITION[1] + PLAYER_HEIGHT):
         BALL_DIRECTION[0] *= -1
-        BALL_SPEED_X += 0.2
+        BALL_SPEED_X += 0.2  # Aumenta a velocidade da bola em cada colisão
         BALL_SPEED_Y += 0.2
 
-    # Detecta pontuação
+    # Detecta pontuação e reinicia a bola
     if BALL_POSITION[0] < 0:
         score_right += 1
         reset_ball()

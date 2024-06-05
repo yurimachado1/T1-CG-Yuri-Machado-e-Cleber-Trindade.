@@ -3,9 +3,6 @@
 ### Tela e Objetos
 O jogo é projetado para ser exibido em uma tela de 800x600 pixels. Ele inclui dois jogadores, representados por retângulos, e uma bola representada por uma elipse.
 
-### Cores e Dimensões
-As cores utilizadas são o azul para o fundo e branco para os jogadores, bola e linha central. As dimensões dos jogadores são 15x150 pixels, e a bola tem um diâmetro de 15 pixels.
-
 ### Velocidades
 A velocidade dos jogadores é fixada em 20 pixels por movimento. A bola começa com uma velocidade de 5 pixels tanto no eixo X quanto no eixo Y, aumentando a cada colisão com um jogador.
 

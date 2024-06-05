@@ -1,6 +1,3 @@
-# T1-CG – Yuri Machado e Cleber Trindade.
-####  Trabalho desenvolvido para a disciplina de Computação Gráfica e Processamento de Imagens com supervisão do professor Mozart
-
 # Relatório Explicativo
 ## Modelagem do Jogo
 ### Tela e Objetos
